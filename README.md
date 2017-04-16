@@ -34,5 +34,12 @@ for:
       allow: [admin]
 by:
   username: admin
+```
+
+- #### Create auth token
+The following curl command will create new token for a specific user. Authentication method is with Auth-Token. The response will be in a json format (supported from API version 14).
 
 ```
+curl -X "POST" -H "Accept: application/json" -H "X-Rundeck-Auth-Token: <auth-token>" http://<host:port>/api/18/tokens/<username>
+```
+NOTE: [For API v18 and earlier: by default the role api_token_group is set for the generated token, and the duration will be the maximum allowed token duration. If user is present in the URL, then the request content is ignored and can be empty.](http://rundeck.org/docs/api/#create-a-token)
