@@ -1,7 +1,38 @@
 # rundeck-api-example
 
-#### Run job without arguments
+- #### Run job without arguments
  The following curl command will run ```job-id``` without parameters. Authentication method is with Auth-Token. The response will be in a json format (supported from API version 14).
 ```sh
 curl -X "POST" -H "Accept: application/json" -H "Content-Type: application/json" -H "X-Rundeck-Auth-Token: <auth-token>" http://<host:port>/api/18/<job-id>/hostname/run
+```
+
+- #### List auth tokens
+The following curl command will list all existing tokens. Authentication method is with Auth-Token. The response will be in a json format (supported from API version 14).
+```
+curl -X "GET" -H "Accept: application/json" -H "X-Rundeck-Auth-Token: <auth-token>" http://<host:port>/api/11/tokens
+```
+NOTE: If you will try to run the command with admin user and the defualt acl policy you will get the following error:
+```
+{
+  "error": true,
+  "apiversion": 18,
+  "errorCode": "api.error.item.unauthorized",
+  "message": "Not authorized for action \"admin\" for Rundeck User account"
+}
+```
+To reslove the issue an acl policy should be added for the user. The policy cannot be added to a group because all token access is under pseudo group ```api_token_group```.
+This acl policy will grant token administration permissions to admin user.
+
+```
+description: Admin user
+context:
+  application: 'rundeck'
+for:
+  resource:
+    - equals:
+        kind: user
+      allow: [admin]
+by:
+  username: admin
+
 ```
